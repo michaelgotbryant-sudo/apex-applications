@@ -302,118 +302,75 @@ textarea {
 </html>
 
 <script>
-const WEBHOOK_URL = "PASTE_YOUR_DISCORD_WEBHOOK_HERE";
+const WEBHOOK = "PASTE_WEBHOOK_HERE";
 
-/* =========================
-   PAGE SCROLL NAV
-========================= */
-function scrollToSection(id){
-  document.getElementById(id).scrollIntoView({
-    behavior: "smooth"
-  });
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
-/* =========================
-   SIMPLE PRO PAGE OPEN
-========================= */
-function openPro(){
-  document.getElementById("pro").classList.remove("hidden");
-  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-}
+function submitApp(){
 
-/* =========================
-   NORMAL APPLICATION SUBMIT
-========================= */
-function nextPage(){
+  const d = discord.value;
+  const e = epic.value;
+  const a = age.value;
+  const r = region.value;
+  const rk = rank.value;
+  const rs = reason.value;
 
-  const discord = document.getElementById("discord").value;
-  const epic = document.getElementById("epic").value;
-  const age = document.getElementById("age").value;
-  const region = document.getElementById("region").value;
-  const platform = document.getElementById("platform").value;
-  const rank = document.getElementById("rank").value;
-  const reason = document.getElementById("reason").value;
-
-  if(!discord || !epic || !age || !region || !platform || !rank || !reason){
-    alert("Please fill out everything.");
+  if(!d || !e || !a || !r || !rk || !rs){
+    alert("Fill everything");
     return;
   }
 
-  fetch(WEBHOOK_URL, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      content: "🔥 NEW APEX APPLICATION",
-      embeds: [{
-        title: "APEX APPLICATION",
-        color: 0xffffff,
-        fields: [
-          {name:"Discord", value: discord},
-          {name:"Epic", value: epic},
-          {name:"Age", value: age},
-          {name:"Region", value: region},
-          {name:"Platform", value: platform},
-          {name:"Rank", value: rank},
-          {name:"Reason", value: reason}
+  fetch(WEBHOOK,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      content:"🔥 NEW APEX PLAYER",
+      embeds:[{
+        title:"APEX APPLICATION",
+        fields:[
+          {name:"Discord", value:d},
+          {name:"Epic", value:e},
+          {name:"Rank", value:rk},
+          {name:"Reason", value:rs}
         ]
       }]
     })
   });
 
-  /* unlock system */
-  document.getElementById("apply").classList.add("hidden");
-  document.getElementById("success").classList.remove("hidden");
-
-  document.getElementById("discordBtn").style.display = "inline-block";
-  document.querySelector("button[onclick='openPro()']").style.display = "inline-block";
+  showPage("success");
 }
 
-/* =========================
-   PRO APPLICATION
-========================= */
 function submitPro(){
 
-  const discord = document.getElementById("proDiscord").value;
-  const epic = document.getElementById("proEpic").value;
-  const pr = document.getElementById("pr").value;
-  const earnings = document.getElementById("earnings").value;
-  const clip = document.getElementById("clip").value;
-
-  if(!discord || !epic || !pr || !earnings || !clip){
-    alert("Clip is REQUIRED for Pro Applications.");
+  if(!clip.value){
+    alert("Clip required");
     return;
   }
 
-  fetch(WEBHOOK_URL, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      content: "🏆 PRO APPLICATION",
-      embeds: [{
-        title: "APEX PRO TRYOUT",
-        color: 16777215,
-        fields: [
-          {name:"Discord", value: discord},
-          {name:"Epic", value: epic},
-          {name:"PR", value: pr},
-          {name:"Earnings", value: earnings},
-          {name:"Clip", value: clip}
+  fetch(WEBHOOK,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      content:"🏆 PRO TRYOUT",
+      embeds:[{
+        title:"APEX PRO APPLICATION",
+        fields:[
+          {name:"Discord", value:proDiscord.value},
+          {name:"Epic", value:proEpic.value},
+          {name:"Clip", value:clip.value}
         ]
       }]
     })
   });
 
-  alert("Pro Application Sent!");
-  document.getElementById("pro").classList.add("hidden");
-  document.getElementById("success").classList.remove("hidden");
+  showPage("success");
 }
 
-/* =========================
-   SIMPLE BACK SYSTEM
-========================= */
-function goBack(){
-  document.getElementById("pro").classList.add("hidden");
-  document.getElementById("apply").classList.remove("hidden");
+function openPro(){
+  showPage("pro");
 }
 </script>
 
