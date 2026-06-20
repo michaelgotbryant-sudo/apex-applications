@@ -10,7 +10,170 @@
 
 <body>
 
-<!-- 👉 PASTE PART 1 HTML HERE -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>APEX V8</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<!-- BACKGROUND LAYER -->
+<div id="particles"></div>
+
+<!-- HEADER -->
+<header class="topbar">
+  <div class="logo">▲ APEX</div>
+
+  <div class="nav">
+    <button onclick="scrollToSection('home')">Home</button>
+    <button onclick="scrollToSection('about')">About</button>
+    <button onclick="scrollToSection('apply')">Apply</button>
+    <button onclick="scrollToSection('faq')">FAQ</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="section hero">
+  <h1 class="title">APEX</h1>
+  <p class="subtitle">
+    Competitive Fortnite Community
+  </p>
+
+  <p class="tagline">
+    Free Coaching • Giveaways on Special Occasions • Build & Zero Build Players Welcome
+  </p>
+
+  <div class="buttons">
+    <button onclick="scrollToSection('apply')">Join APEX</button>
+    <button onclick="openPro()">Apply Pro</button>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <h2>About APEX</h2>
+  <p>
+    APEX is a competitive Fortnite community dedicated to helping players improve,
+    compete, and grow in a structured environment.
+  </p>
+
+  <ul>
+    <li>✔ Free Coaching for all members</li>
+    <li>✔ Giveaways on special occasions</li>
+    <li>✔ Build & Zero Build support</li>
+    <li>✔ Competitive scrims & improvement focus</li>
+  </ul>
+</section>
+
+<!-- STATS -->
+<section class="section stats">
+  <h2>Community Stats</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Members</h3>
+      <p>30</p>
+    </div>
+
+    <div class="card">
+      <h3>Accepted</h3>
+      <p>30</p>
+    </div>
+
+    <div class="card">
+      <h3>Coaches</h3>
+      <p>1</p>
+    </div>
+
+    <div class="card">
+      <h3>Giveaways</h3>
+      <p>0</p>
+    </div>
+  </div>
+</section>
+
+<!-- APPLY SECTION -->
+<section id="apply" class="section">
+  <h2>Join APEX</h2>
+
+  <div class="form">
+    <input id="discord" placeholder="Discord Username">
+    <input id="epic" placeholder="Epic Username">
+    <input id="age" placeholder="Age">
+    <input id="region" placeholder="Region">
+
+    <select id="platform">
+      <option value="">Platform</option>
+      <option>PC</option>
+      <option>PlayStation</option>
+      <option>Xbox</option>
+      <option>Mobile</option>
+    </select>
+
+    <select id="rank">
+      <option value="">Rank</option>
+      <option>Bronze</option>
+      <option>Silver</option>
+      <option>Gold</option>
+      <option>Platinum</option>
+      <option>Diamond</option>
+      <option>Elite</option>
+      <option>Champion</option>
+      <option>Unreal</option>
+    </select>
+
+    <textarea id="reason" placeholder="Why do you want to join APEX?"></textarea>
+
+    <button onclick="nextPage()">Next</button>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section">
+  <h2>FAQ</h2>
+
+  <p><b>Is coaching free?</b> Yes.</p>
+  <p><b>Do you accept Zero Build?</b> Yes.</p>
+  <p><b>Do I need earnings?</b> No.</p>
+  <p><b>How fast are applications reviewed?</b> 24–72 hours.</p>
+</section>
+
+<!-- CLIPS -->
+<section class="section">
+  <h2>Clips Showcase</h2>
+  <div class="clip-box">
+    <p>Featured clips coming soon...</p>
+  </div>
+</section>
+
+<!-- PRO PAGE (hidden system) -->
+<section id="pro" class="section hidden">
+  <h2>Pro Application</h2>
+
+  <input id="proDiscord" placeholder="Discord Username">
+  <input id="proEpic" placeholder="Epic Username">
+  <input id="pr" placeholder="PR (Arena Points)">
+  <input id="earnings" placeholder="Earnings ($0 if none)">
+  <input id="clip" placeholder="Clip Link (REQUIRED)">
+
+  <button onclick="submitPro()">Submit Pro Application</button>
+</section>
+
+<!-- SUCCESS -->
+<section id="success" class="section hidden">
+  <h2>Application Submitted</h2>
+  <p>You can now join Discord and apply Pro.</p>
+
+  <a id="discordBtn" href="https://discord.gg/uKsnSB3ZwU" target="_blank">
+    Join Discord
+  </a>
+</section>
+
+</body>
+</html>
 
 <script>
 /* 👉 PART 3 JS WILL GO HERE LATER */
