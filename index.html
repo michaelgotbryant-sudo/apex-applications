@@ -2,360 +2,382 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>APEX ESPORTS</title>
+<title>APEX ESPORTS LAUNCHER V11</title>
 
 <style>
+
 body {
   margin: 0;
   font-family: Arial;
   background: black;
   color: white;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
-/* ================= CINEMATIC INTRO ================= */
-#intro {
+/* BACKGROUND */
+video {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  filter: brightness(0.35) contrast(1.2);
+  z-index: -2;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.85));
+  z-index: -1;
+}
+
+/* INTRO */
+.intro {
+  position: fixed;
+  inset: 0;
   background: black;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   z-index: 9999;
 }
 
-.intro-bg {
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 40%);
-  animation: float 6s linear infinite;
+.intro.hide {
+  opacity: 0;
+  visibility: hidden;
+  transition: 1s ease;
 }
 
-@keyframes float {
-  0% { transform: translate(0,0); }
-  50% { transform: translate(-5%,-5%); }
-  100% { transform: translate(0,0); }
-}
-
-.intro-content {
-  text-align: center;
-  z-index: 2;
-}
-
-.intro-logo {
+.intro h1 {
   font-size: 90px;
-  letter-spacing: 15px;
-  animation: glow 2s infinite alternate;
+  letter-spacing: 18px;
+  opacity: 0;
+  animation: logoIn 1.2s forwards;
 }
 
-@keyframes glow {
-  from { text-shadow: 0 0 10px rgba(255,255,255,0.1); }
-  to { text-shadow: 0 0 40px rgba(255,255,255,0.5); }
+.intro p {
+  color: #888;
+  font-size: 12px;
+  letter-spacing: 3px;
+  opacity: 0;
+  animation: subIn 1.5s forwards;
+  animation-delay: 0.4s;
 }
 
-#intro button {
-  padding: 12px 20px;
-  margin-top: 20px;
-  background: white;
-  border: none;
-  cursor: pointer;
-}
-
-/* ================= BACKGROUND ================= */
-.bg {
+/* NAV */
+.nav {
   position: fixed;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08), transparent 40%),
-              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 40%);
-  animation: move 12s linear infinite;
-  z-index: -1;
-}
-
-@keyframes move {
-  0% { transform: translate(0,0); }
-  50% { transform: translate(-10%,-10%); }
-  100% { transform: translate(0,0); }
-}
-
-/* ================= LAYOUT ================= */
-.lobby {
-  display: flex;
-  height: 100vh;
-}
-
-/* MENU */
-.menu {
-  width: 240px;
-  background: rgba(255,255,255,0.03);
-  border-right: 1px solid rgba(255,255,255,0.1);
-  padding: 20px;
-}
-
-.brand {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.menu button {
+  top: 0;
   width: 100%;
-  margin: 6px 0;
-  padding: 10px;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
-  cursor: pointer;
-}
-
-/* SCREEN */
-.screen {
-  flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
-  text-align: center;
+  gap: 35px;
+  padding: 18px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+  z-index: 10;
+}
+
+.nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 /* PAGES */
-.page { display: none; }
-.page.active { display: block; }
-
-/* TITLE */
-.title {
-  font-size: 80px;
-  letter-spacing: 10px;
+.page {
+  display: none;
+  min-height: 100vh;
+  padding: 120px 20px 60px;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* INPUTS */
+.page.active {
+  display: flex;
+}
+
+/* UI */
+h2 {
+  font-size: 60px;
+  letter-spacing: 10px;
+  margin: 0;
+}
+
+.panel {
+  margin-top: 20px;
+  max-width: 700px;
+  padding: 20px 30px;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  text-align: left;
+  line-height: 1.6;
+}
+
+/* inputs */
 input, select, textarea {
-  display: block;
-  margin: 8px auto;
   padding: 10px;
   width: 260px;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
+  margin: 6px;
 }
 
-/* BUTTON */
+textarea {
+  height: 80px;
+  resize: none;
+}
+
+/* button */
 button {
-  padding: 10px 15px;
-  margin-top: 10px;
+  padding: 12px 22px;
+  border: none;
   background: white;
   color: black;
-  border: none;
+  font-weight: bold;
   cursor: pointer;
+  margin-top: 10px;
 }
 
-/* CARDS */
-.card {
+/* stats */
+.stats {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.statBox {
+  padding: 15px 25px;
+  background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
-  padding: 15px;
-  margin: 10px;
+  border-radius: 10px;
+  min-width: 140px;
 }
-</style>
 
+/* animations */
+@keyframes logoIn {
+  from { opacity: 0; transform: scale(1.2); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes subIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
 </head>
 
 <body>
 
-<!-- CINEMATIC INTRO -->
-<div id="intro">
-  <div class="intro-bg"></div>
-  <div class="intro-content">
-    <h1 class="intro-logo">APEX</h1>
-    <p>ESPORTS ORGANIZATION</p>
-    <button onclick="enterSite()">CLICK TO ENTER</button>
+<!-- BACKGROUND -->
+<video autoplay muted loop>
+  <source src="https://cdn.coverr.co/videos/coverr-digital-grid-and-particles-1637/1080p.mp4">
+</video>
+
+<div class="overlay"></div>
+
+<!-- INTRO -->
+<div class="intro" id="intro">
+  <h1>APEX</h1>
+  <p>INITIALIZING RECRUITMENT SYSTEM...</p>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button onclick="showPage('home')">HOME</button>
+  <button onclick="showPage('apply')">APPLY</button>
+  <button onclick="showPage('pro')">PRO APPLY</button>
+  <button onclick="showPage('about')">ABOUT</button>
+  <button onclick="showPage('stats')">STATS</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <h2>WELCOME TO APEX</h2>
+  <div class="panel">
+    Elite esports organization recruitment system.
   </div>
 </div>
 
-<div class="bg"></div>
+<!-- APPLY -->
+<div id="apply" class="page">
+  <h2>APPLICATION</h2>
 
-<div class="lobby">
+  <div class="panel">
+    <input id="name" placeholder="Name"><br>
+    <input id="discord" placeholder="Discord Tag"><br>
 
-  <!-- MENU -->
-  <div class="menu">
-    <div class="brand">▲ APEX</div>
+    <textarea id="reason" placeholder="Why do you want to join?"></textarea><br>
 
-    <button onclick="show('home')">HOME</button>
-    <button onclick="show('about')">ABOUT</button>
-    <button onclick="show('apply')">APPLY</button>
-    <button onclick="show('pro')">PRO</button>
-    <button onclick="show('dash')">DASHBOARD</button>
+    <select id="mode">
+      <option>Build</option>
+      <option>Zero Build</option>
+    </select><br>
+
+    <button onclick="submitApp()">SUBMIT APPLICATION</button>
   </div>
+</div>
 
-  <!-- SCREEN -->
-  <div class="screen">
+<!-- PRO APPLY -->
+<div id="pro" class="page">
+  <h2>PRO APPLICATION</h2>
 
-    <!-- HOME -->
-    <section id="home" class="page active">
-      <h1 class="title">APEX</h1>
-      <p>ESPORTS ORG</p>
+  <div class="panel">
+    <input id="proName" placeholder="Name"><br>
 
-      <div class="card">
-        <h3>LIVE MEMBERS</h3>
-        <h1 id="members">30</h1>
-      </div>
-    </section>
+    <select id="rank">
+      <option>Bronze</option>
+      <option>Silver</option>
+      <option>Gold</option>
+      <option>Platinum</option>
+      <option>Diamond</option>
+      <option>Elite</option>
+      <option>Champion</option>
+      <option>Unreal</option>
+    </select><br>
 
-    <!-- ABOUT -->
-    <section id="about" class="page">
-      <h2>ABOUT APEX</h2>
-      <p>Free coaching, giveaways, Build & Zero Build support.</p>
-    </section>
+    <textarea id="proReason" placeholder="Why do you want to join pro team?"></textarea><br>
 
-    <!-- APPLY -->
-    <section id="apply" class="page">
+    <select id="proMode">
+      <option>Build Pro</option>
+      <option>Zero Build Pro</option>
+    </select><br>
 
-      <h2>APPLICATION</h2>
+    <button onclick="submitPro()">SUBMIT PRO</button>
+  </div>
+</div>
 
-      <input id="discord" placeholder="Discord">
-      <input id="epic" placeholder="Epic">
-      <input id="age" placeholder="Age">
-      <input id="region" placeholder="Region">
+<!-- ABOUT (UPDATED) -->
+<div id="about" class="page">
+  <h2>ABOUT APEX</h2>
 
-      <select id="rank">
-        <option>Rank</option>
-        <option>Bronze</option>
-        <option>Silver</option>
-        <option>Gold</option>
-        <option>Platinum</option>
-        <option>Diamond</option>
-        <option>Champion</option>
-        <option>Unreal</option>
-      </select>
+  <div class="panel">
 
-      <textarea id="reason" placeholder="Why join APEX?"></textarea>
+    <p><b>APEX</b> is a competitive esports organization built for players who want more than just casual gameplay.
+    We focus on structured improvement, team coordination, and building high-level competitive talent.</p>
 
-      <button onclick="submitApp()">SUBMIT</button>
+    <p>Founded as a community of motivated players, APEX has grown into a system-driven org where players apply,
+    get reviewed, and join teams based on skill, mindset, and potential.</p>
 
-    </section>
+    <p>We operate with:
+    <br>• Competitive Core Team (32 members)
+    <br>• Recruitment Pipeline (Applications system)
+    <br>• Pro Division (Elite-ranked players)
+    <br>• Coaching & Performance Guidance</p>
 
-    <!-- PRO -->
-    <section id="pro" class="page">
+    <p>Our goal is not just to recruit players — but to develop them.
+    Every member is expected to improve mechanics, game sense, communication, and teamwork.</p>
 
-      <h2>PRO TRYOUTS</h2>
+    <p><b>We look for:</b>
+    <br>• Consistency
+    <br>• Competitive mindset
+    <br>• Adaptability under pressure
+    <br>• Team-first mentality</p>
 
-      <input id="pdisc" placeholder="Discord">
-      <input id="pepic" placeholder="Epic">
-      <input id="clip" placeholder="CLIP REQUIRED">
-
-      <button onclick="submitPro()">SUBMIT PRO</button>
-
-    </section>
-
-    <!-- DASHBOARD -->
-    <section id="dash" class="page">
-      <h2>ORG DASHBOARD</h2>
-
-      <div class="card">
-        <h3>Members</h3>
-        <h1 id="m2">30</h1>
-      </div>
-
-      <div class="card">
-        <h3>Applications</h3>
-        <h1>30</h1>
-      </div>
-
-      <div class="card">
-        <h3>Coaches</h3>
-        <h1>1</h1>
-      </div>
-
-    </section>
+    <p style="color:#aaa;">“We don’t just build players. We build competitors.”</p>
 
   </div>
+</div>
+
+<!-- STATS -->
+<div id="stats" class="page">
+  <h2>LIVE STATS</h2>
+  <div class="stats" id="statsBox"></div>
 </div>
 
 <script>
 
-const WEBHOOK = "https://discord.com/api/webhooks/1517667847097024603/7_SV-5n2-Eucms2LzE-SH_HXNSj0YsTRIZ7cluc119KfLhO5e2MxeB9FBuXb1EiqLKb0";
-
 /* INTRO */
-function enterSite(){
-  document.getElementById("intro").style.display = "none";
+setTimeout(() => {
+  document.getElementById("intro").classList.add("hide");
+}, 3000);
+
+/* BASE STATS */
+const BASE_MEMBERS = 32;
+const BASE_APPS = 32;
+const BASE_PRO = 2;
+
+/* DATA */
+let apps = JSON.parse(localStorage.getItem("apps") || "[]");
+let proApps = JSON.parse(localStorage.getItem("proApps") || "[]");
+
+/* WEBHOOK */
+const webhook = "YOUR_WEBHOOK_URL_HERE";
+
+/* NOTIFY */
+function notify(type, name, extra){
+  if(webhook.includes("http")){
+    fetch(webhook, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        content: `🔥 ${type} APPLICATION\n👤 ${name}\n📝 ${extra}`
+      })
+    });
+  }
 }
-
-/* NAV */
-function show(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-/* LIVE COUNTER */
-let members = 30;
-
-setInterval(()=>{
-  members += Math.random()>0.5?1:-1;
-  if(members<25) members=25;
-  if(members>40) members=40;
-
-  document.getElementById("members").innerText = members;
-  document.getElementById("m2").innerText = members;
-},3000);
 
 /* APPLY */
 function submitApp(){
+  let name = document.getElementById("name").value;
+  let discord = document.getElementById("discord").value;
+  let reason = document.getElementById("reason").value;
 
-  const discord = document.getElementById("discord").value;
-  const epic = document.getElementById("epic").value;
-  const rank = document.getElementById("rank").value;
-  const reason = document.getElementById("reason").value;
+  if(!name || !discord || !reason){
+    alert("Fill everything");
+    return;
+  }
 
-  fetch(WEBHOOK,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      content:"NEW APPLICATION",
-      embeds:[{
-        title:"APEX APP",
-        fields:[
-          {name:"Discord", value:discord},
-          {name:"Epic", value:epic},
-          {name:"Rank", value:rank},
-          {name:"Reason", value:reason}
-        ]
-      }]
-    })
-  });
+  apps.push({name, discord, reason});
+  localStorage.setItem("apps", JSON.stringify(apps));
 
-  alert("Submitted!");
+  notify("NORMAL", name, reason);
+  updateStats();
+  alert("Application Sent");
 }
 
 /* PRO */
 function submitPro(){
+  let name = document.getElementById("proName").value;
+  let rank = document.getElementById("rank").value;
+  let reason = document.getElementById("proReason").value;
 
-  const pdisc = document.getElementById("pdisc").value;
-  const pepic = document.getElementById("pepic").value;
-  const clip = document.getElementById("clip").value;
-
-  if(!clip){
-    alert("Clip required");
+  if(!name || !rank || !reason){
+    alert("Fill everything");
     return;
   }
 
-  fetch(WEBHOOK,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      content:"PRO TRYOUT",
-      embeds:[{
-        title:"APEX PRO",
-        fields:[
-          {name:"Discord", value:pdisc},
-          {name:"Epic", value:pepic},
-          {name:"Clip", value:clip}
-        ]
-      }]
-    })
-  });
+  proApps.push({name, rank, reason});
+  localStorage.setItem("proApps", JSON.stringify(proApps));
 
-  alert("PRO SUBMITTED");
+  notify("PRO", name, `Rank: ${rank} | ${reason}`);
+  updateStats();
+  alert("PRO Application Sent");
 }
+
+/* STATS */
+function updateStats(){
+  document.getElementById("statsBox").innerHTML = `
+    <div class="statBox">Members<br>${BASE_MEMBERS}</div>
+    <div class="statBox">Applications<br>${BASE_APPS + apps.length}</div>
+    <div class="statBox">Pro Apps<br>${BASE_PRO + proApps.length}</div>
+    <div class="statBox">Coach<br>1</div>
+  `;
+}
+
+/* NAV */
+function showPage(p){
+  document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
+  document.getElementById(p).classList.add("active");
+}
+
+updateStats();
 
 </script>
 
