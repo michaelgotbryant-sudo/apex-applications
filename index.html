@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>APEX ESPORTS LAUNCHER V15</title>
+<title>APEX ESPORTS LAUNCHER</title>
 
 <style>
-
 body {
   margin: 0;
   font-family: Arial;
@@ -41,17 +40,13 @@ video {
   align-items: center;
   flex-direction: column;
   z-index: 9999;
-}
-
-.intro.hide {
-  opacity: 0;
-  visibility: hidden;
-  transition: 1s ease;
+  animation: fadeOut 3s forwards;
 }
 
 .intro h1 {
   font-size: 90px;
   letter-spacing: 18px;
+  color: white;
   opacity: 0;
   animation: logoIn 1.2s forwards;
 }
@@ -85,6 +80,12 @@ video {
   color: white;
   font-weight: bold;
   cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+}
+
+.nav button:hover {
+  color: #ddd;
 }
 
 /* PAGES */
@@ -101,13 +102,15 @@ video {
   display: flex;
 }
 
-/* UI */
+/* TITLE */
 h2 {
   font-size: 60px;
   letter-spacing: 10px;
   margin: 0;
+  text-transform: uppercase;
 }
 
+/* PANEL */
 .panel {
   margin-top: 20px;
   max-width: 750px;
@@ -120,11 +123,20 @@ h2 {
   line-height: 1.6;
 }
 
-/* inputs */
+/* INPUTS */
 input, select, textarea {
   padding: 10px;
   width: 260px;
   margin: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #aaa;
 }
 
 textarea {
@@ -132,8 +144,8 @@ textarea {
   resize: none;
 }
 
-/* button */
-button {
+/* BUTTON */
+button.submit-btn {
   padding: 12px 22px;
   border: none;
   background: white;
@@ -141,220 +153,7 @@ button {
   font-weight: bold;
   cursor: pointer;
   margin-top: 10px;
-}
-
-/* stats */
-.stats {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.statBox {
-  padding: 15px 25px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  min-width: 170px;
-}
-
-/* animations */
-@keyframes logoIn {
-  from { opacity: 0; transform: scale(1.2); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes subIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-</style>
-</head>
-
-<body>
-
-<!-- BACKGROUND -->
-<video autoplay muted loop>
-  <source src="https://cdn.coverr.co/videos/coverr-digital-grid-and-particles-1637/1080p.mp4">
-</video>
-
-<div class="overlay"></div>
-
-<!-- INTRO -->
-<div class="intro" id="intro">
-  <h1>APEX</h1>
-  <p>INITIALIZING RECRUITMENT SYSTEM...</p>
-</div>
-
-<!-- NAV -->
-<div class="nav">
-  <button onclick="showPage('home')">HOME</button>
-  <button onclick="showPage('apply')">APPLY</button>
-  <button onclick="showPage('pro')">PRO APPLY</button>
-  <button onclick="showPage('coach')">COACH APPLY</button>
-  <button onclick="showPage('about')">ABOUT</button>
-  <button onclick="showPage('stats')">STATS</button>
-</div>
-
-<!-- HOME -->
-<div id="home" class="page active">
-  <h2>WELCOME TO APEX</h2>
-</div>
-
-<!-- APPLY -->
-<div id="apply" class="page">
-  <h2>APPLICATION</h2>
-
-  <div class="panel">
-    <input id="name" placeholder="Name"><br>
-    <input id="discord" placeholder="Discord Tag"><br>
-    <textarea id="reason" placeholder="Why do you want to join?"></textarea><br>
-    <select id="mode">
-      <option>Build</option>
-      <option>Zero Build</option>
-    </select><br>
-    <button onclick="submitApp()">SUBMIT APPLICATION</button>
-  </div>
-</div>
-
-<!-- PRO APPLY -->
-<div id="pro" class="page">
-  <h2>PRO APPLICATION</h2>
-
-  <div class="panel">
-    <input id="proName" placeholder="Name"><br>
-    <select id="rank">
-      <option>Bronze</option>
-      <option>Silver</option>
-      <option>Gold</option>
-      <option>Platinum</option>
-      <option>Diamond</option>
-      <option>Elite</option>
-      <option>Champion</option>
-      <option>Unreal</option>
-    </select><br>
-    <textarea id="proReason" placeholder="Why do you want to join pro team?"></textarea><br>
-    <button onclick="submitPro()">SUBMIT PRO</button>
-  </div>
-</div>
-
-<!-- COACH APPLY -->
-<div id="coach" class="page">
-  <h2>COACH APPLICATION</h2>
-
-  <div class="panel">
-    <input id="coachName" placeholder="Name"><br>
-    <input id="coachDiscord" placeholder="Discord Tag"><br>
-
-    <select id="hasCoached">
-      <option value="">Have you coached before?</option>
-      <option>Yes</option>
-      <option>No</option>
-    </select><br>
-
-    <textarea id="coachReason" placeholder="Why do you want to be a coach?"></textarea><br>
-
-    <button onclick="submitCoach()">SUBMIT COACH APP</button>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<div id="about" class="page">
-  <h2>ABOUT APEX</h2>
-  <div class="panel">
-    Elite esports organization recruitment system built for competitive players.
-  </div>
-</div>
-
-<!-- STATS -->
-<div id="stats" class="page">
-  <h2>LIVE STATS</h2>
-  <div class="stats" id="statsBox"></div>
-</div>
-
-<script>
-
-/* INTRO */
-setTimeout(() => {
-  document.getElementById("intro").classList.add("hide");
-}, 3000);
-
-/* BASE DATA */
-const BASE_APPS = 32;
-const BASE_PRO = 2;
-const BASE_COACH = 1;
-const BASE_MEMBERS = 32; // ✅ ADDED
-
-/* STORAGE */
-let apps = JSON.parse(localStorage.getItem("apps") || "[]");
-let proApps = JSON.parse(localStorage.getItem("proApps") || "[]");
-let coaches = JSON.parse(localStorage.getItem("coaches") || "[]");
-
-/* APPLY */
-function submitApp(){
-  let name = document.getElementById("name").value;
-  let discord = document.getElementById("discord").value;
-  let reason = document.getElementById("reason").value;
-
-  if(!name || !discord || !reason) return alert("Fill everything");
-
-  apps.push({name, discord, reason});
-  localStorage.setItem("apps", JSON.stringify(apps));
-
-  updateStats();
-}
-
-/* PRO */
-function submitPro(){
-  let name = document.getElementById("proName").value;
-  let rank = document.getElementById("rank").value;
-  let reason = document.getElementById("proReason").value;
-
-  if(!name || !rank || !reason) return alert("Fill everything");
-
-  proApps.push({name, rank, reason});
-  localStorage.setItem("proApps", JSON.stringify(proApps));
-
-  updateStats();
-}
-
-/* COACH */
-function submitCoach(){
-  let name = document.getElementById("coachName").value;
-  let discord = document.getElementById("coachDiscord").value;
-  let hasCoached = document.getElementById("hasCoached").value;
-  let reason = document.getElementById("coachReason").value;
-
-  if(!name || !discord || !hasCoached || !reason) return alert("Fill everything");
-
-  coaches.push({name, discord, hasCoached, reason});
-  localStorage.setItem("coaches", JSON.stringify(coaches));
-
-  updateStats();
-}
-
-/* STATS */
-function updateStats(){
-  document.getElementById("statsBox").innerHTML = `
-    <div class="statBox">Members<br>${BASE_MEMBERS + apps.length}</div>
-    <div class="statBox">Applications<br>${BASE_APPS + apps.length}</div>
-    <div class="statBox">Pro Apps<br>${BASE_PRO + proApps.length}</div>
-    <div class="statBox">Coach Applications<br>${coaches.length}</div>
-    <div class="statBox">Coaches (Staff)<br>${BASE_COACH}</div>
-  `;
-}
-
-/* NAV */
-function showPage(p){
-  document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
-  document.getElementById(p).classList.add("active");
-}
-
-updateStats();
-
-</script>
-
-</body>
-</html>
+  border-radius: 4px;
+  width: 260px;
+  margin-left: 6px;
+  transition: background 0.2No response
