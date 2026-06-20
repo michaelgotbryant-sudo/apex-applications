@@ -13,169 +13,162 @@
 body {
   background: radial-gradient(circle at top, #111, #000);
   color: white;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-/* ===== TOP BAR ===== */
-.topbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
+/* =========================
+   LOBBY LAYOUT
+========================= */
+.lobby {
   display: flex;
-  justify-content: space-between;
-  padding: 15px 25px;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  z-index: 999;
+  height: 100vh;
+  width: 100%;
 }
 
-.logo {
+/* =========================
+   LEFT MENU (GAME STYLE)
+========================= */
+.menu {
+  width: 240px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(15px);
+  border-right: 1px solid rgba(255,255,255,0.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brand {
   font-size: 22px;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   color: #e5e5e5;
-  text-shadow: 0 0 10px rgba(255,255,255,0.2);
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(255,255,255,0.15);
 }
 
-.nav button {
+.menu button {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.15);
   color: white;
-  padding: 6px 12px;
-  margin-left: 8px;
-  border-radius: 6px;
+  padding: 10px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.25s;
+  border-radius: 6px;
 }
 
-.nav button:hover {
+.menu button:hover {
   background: white;
   color: black;
+  transform: translateX(5px);
 }
 
-/* ===== SECTIONS ===== */
-.section {
-  padding: 120px 20px;
+/* =========================
+   MAIN SCREEN
+========================= */
+.screen {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  position: relative;
 }
 
-.hero {
-  padding-top: 180px;
+/* =========================
+   PAGES
+========================= */
+.page {
+  display: none;
+  animation: fade 0.5s ease;
 }
 
-/* ===== TITLE ===== */
+.page.active {
+  display: block;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================
+   TITLE (APEX LOGO)
+========================= */
 .title {
-  font-size: 80px;
+  font-size: 90px;
+  letter-spacing: 12px;
   font-weight: bold;
-  letter-spacing: 10px;
-  color: #dcdcdc;
-  text-shadow: 0 0 20px rgba(255,255,255,0.2);
+  color: #e5e5e5;
+  text-shadow: 0 0 30px rgba(255,255,255,0.15);
+  animation: glow 2.5s infinite alternate;
 }
 
-.subtitle {
-  font-size: 20px;
+@keyframes glow {
+  from { text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+  to { text-shadow: 0 0 35px rgba(255,255,255,0.4); }
+}
+
+/* =========================
+   SUB TEXT
+========================= */
+.sub {
   margin-top: 10px;
   color: #aaa;
 }
 
-.tagline {
-  margin-top: 10px;
-  color: #888;
-}
-
-/* ===== BUTTONS ===== */
-.buttons button,
-.form button {
-  margin-top: 20px;
+/* =========================
+   BUTTONS (GAME STYLE)
+========================= */
+button {
+  margin-top: 12px;
   padding: 12px 18px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
   background: linear-gradient(90deg, #dcdcdc, #777);
   color: black;
-  font-weight: bold;
-  transition: 0.3s;
+  transition: 0.25s;
 }
 
-.buttons button:hover,
-.form button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
 
-/* ===== ABOUT ===== */
-.section ul {
-  list-style: none;
-  margin-top: 20px;
-}
-
-.section ul li {
-  margin: 8px 0;
-  color: #bbb;
-}
-
-/* ===== STATS ===== */
-.stats .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 20px;
-  margin-top: 30px;
-}
-
-.card {
-  background: rgba(255,255,255,0.05);
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255,255,255,0.3);
-}
-
-/* ===== FORMS ===== */
-.form input,
-.form select,
-.form textarea {
+/* =========================
+   INPUT SYSTEM
+========================= */
+input,
+textarea,
+select {
   display: block;
-  width: 80%;
   margin: 10px auto;
+  width: 260px;
   padding: 10px;
   border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.15);
   background: rgba(0,0,0,0.4);
   color: white;
 }
 
+/* =========================
+   TEXT AREA
+========================= */
 textarea {
-  height: 80px;
+  height: 90px;
+  resize: none;
 }
 
-/* ===== FAQ ===== */
-#faq p {
-  margin: 10px 0;
-  color: #aaa;
+/* =========================
+   SUCCESS SCREEN
+========================= */
+#success {
+  text-align: center;
 }
 
-/* ===== CLIPS ===== */
-.clip-box {
-  margin-top: 20px;
-  padding: 40px;
-  border: 1px dashed rgba(255,255,255,0.2);
-  border-radius: 10px;
-  color: #777;
-}
-
-/* ===== PRO / SUCCESS ===== */
-.hidden {
-  display: none;
-}
-
-/* ===== DISCORD BUTTON ===== */
 #discordBtn {
   display: inline-block;
   margin-top: 20px;
@@ -184,19 +177,23 @@ textarea {
   color: white;
   text-decoration: none;
   border-radius: 8px;
-  font-weight: bold;
+  box-shadow: 0 0 20px rgba(88,101,242,0.3);
 }
 
-/* ===== MOBILE ===== */
+/* =========================
+   RESPONSIVE
+========================= */
 @media (max-width: 768px) {
-  .title {
-    font-size: 40px;
+  .menu {
+    width: 160px;
   }
 
-  .form input,
-  .form select,
-  .form textarea {
-    width: 95%;
+  .title {
+    font-size: 50px;
+  }
+
+  input, textarea, select {
+    width: 90%;
   }
 }
 </style>
