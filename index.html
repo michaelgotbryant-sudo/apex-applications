@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>APEX ESPORTS LAUNCHER V11</title>
+<title>APEX ESPORTS LAUNCHER V15</title>
 
 <style>
 
@@ -72,7 +72,7 @@ video {
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 35px;
+  gap: 25px;
   padding: 18px;
   background: rgba(0,0,0,0.55);
   backdrop-filter: blur(12px);
@@ -110,7 +110,7 @@ h2 {
 
 .panel {
   margin-top: 20px;
-  max-width: 700px;
+  max-width: 750px;
   padding: 20px 30px;
   background: rgba(0,0,0,0.45);
   border: 1px solid rgba(255,255,255,0.1);
@@ -157,7 +157,7 @@ button {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px;
-  min-width: 140px;
+  min-width: 170px;
 }
 
 /* animations */
@@ -193,6 +193,7 @@ button {
   <button onclick="showPage('home')">HOME</button>
   <button onclick="showPage('apply')">APPLY</button>
   <button onclick="showPage('pro')">PRO APPLY</button>
+  <button onclick="showPage('coach')">COACH APPLY</button>
   <button onclick="showPage('about')">ABOUT</button>
   <button onclick="showPage('stats')">STATS</button>
 </div>
@@ -201,7 +202,7 @@ button {
 <div id="home" class="page active">
   <h2>WELCOME TO APEX</h2>
   <div class="panel">
-    Elite esports organization recruitment system.
+    Elite esports organization recruitment system built for competitive players.
   </div>
 </div>
 
@@ -212,14 +213,11 @@ button {
   <div class="panel">
     <input id="name" placeholder="Name"><br>
     <input id="discord" placeholder="Discord Tag"><br>
-
     <textarea id="reason" placeholder="Why do you want to join?"></textarea><br>
-
     <select id="mode">
       <option>Build</option>
       <option>Zero Build</option>
     </select><br>
-
     <button onclick="submitApp()">SUBMIT APPLICATION</button>
   </div>
 </div>
@@ -230,7 +228,6 @@ button {
 
   <div class="panel">
     <input id="proName" placeholder="Name"><br>
-
     <select id="rank">
       <option>Bronze</option>
       <option>Silver</option>
@@ -241,46 +238,61 @@ button {
       <option>Champion</option>
       <option>Unreal</option>
     </select><br>
-
     <textarea id="proReason" placeholder="Why do you want to join pro team?"></textarea><br>
-
-    <select id="proMode">
-      <option>Build Pro</option>
-      <option>Zero Build Pro</option>
-    </select><br>
-
     <button onclick="submitPro()">SUBMIT PRO</button>
   </div>
 </div>
 
-<!-- ABOUT (UPDATED) -->
+<!-- COACH APPLY -->
+<div id="coach" class="page">
+  <h2>COACH APPLICATION</h2>
+
+  <div class="panel">
+    <input id="coachName" placeholder="Name"><br>
+    <input id="coachDiscord" placeholder="Discord Tag"><br>
+
+    <select id="hasCoached">
+      <option value="">Have you coached before?</option>
+      <option>Yes</option>
+      <option>No</option>
+    </select><br>
+
+    <textarea id="coachReason" placeholder="Why do you want to be a coach?"></textarea><br>
+
+    <button onclick="submitCoach()">SUBMIT COACH APP</button>
+  </div>
+</div>
+
+<!-- ABOUT -->
 <div id="about" class="page">
   <h2>ABOUT APEX</h2>
 
   <div class="panel">
 
-    <p><b>APEX</b> is a competitive esports organization built for players who want more than just casual gameplay.
-    We focus on structured improvement, team coordination, and building high-level competitive talent.</p>
+    <p><b>APEX</b> is a competitive esports organization built for players who want to grow beyond casual gameplay and enter a structured competitive environment.</p>
 
-    <p>Founded as a community of motivated players, APEX has grown into a system-driven org where players apply,
-    get reviewed, and join teams based on skill, mindset, and potential.</p>
+    <p>We focus on skill development, teamwork, and competitive progression through a structured recruitment system.</p>
 
-    <p>We operate with:
-    <br>• Competitive Core Team (32 members)
-    <br>• Recruitment Pipeline (Applications system)
-    <br>• Pro Division (Elite-ranked players)
-    <br>• Coaching & Performance Guidance</p>
+    <hr style="border:1px solid rgba(255,255,255,0.1); margin:15px 0;">
 
-    <p>Our goal is not just to recruit players — but to develop them.
-    Every member is expected to improve mechanics, game sense, communication, and teamwork.</p>
+    <p><b>WHAT WE OFFER</b><br>
+    • Structured recruitment system<br>
+    • Pro competitive division<br>
+    • Coaching staff for improvement<br>
+    • Active competitive community</p>
 
-    <p><b>We look for:</b>
-    <br>• Consistency
-    <br>• Competitive mindset
-    <br>• Adaptability under pressure
-    <br>• Team-first mentality</p>
+    <hr style="border:1px solid rgba(255,255,255,0.1); margin:15px 0;">
 
-    <p style="color:#aaa;">“We don’t just build players. We build competitors.”</p>
+    <p><b>OUR STRUCTURE</b><br>
+    • Application Pipeline<br>
+    • Pro Division<br>
+    • Coaching Staff</p>
+
+    <hr style="border:1px solid rgba(255,255,255,0.1); margin:15px 0;">
+
+    <p style="color:#aaa;">
+      “We don’t just accept players — we build competitors.”
+    </p>
 
   </div>
 </div>
@@ -298,17 +310,18 @@ setTimeout(() => {
   document.getElementById("intro").classList.add("hide");
 }, 3000);
 
-/* BASE STATS */
-const BASE_MEMBERS = 32;
+/* BASE DATA */
 const BASE_APPS = 32;
 const BASE_PRO = 2;
+const BASE_COACH = 1;
 
-/* DATA */
+/* STORAGE */
 let apps = JSON.parse(localStorage.getItem("apps") || "[]");
 let proApps = JSON.parse(localStorage.getItem("proApps") || "[]");
+let coaches = JSON.parse(localStorage.getItem("coaches") || "[]");
 
 /* WEBHOOK */
-const webhook = "https://discord.com/api/webhooks/1517667847097024603/7_SV-5n2-Eucms2LzE-SH_HXNSj0YsTRIZ7cluc119KfLhO5e2MxeB9FBuXb1EiqLKb0";
+const webhook = "YOUR_WEBHOOK_URL_HERE";
 
 /* NOTIFY */
 function notify(type, name, extra){
@@ -329,17 +342,14 @@ function submitApp(){
   let discord = document.getElementById("discord").value;
   let reason = document.getElementById("reason").value;
 
-  if(!name || !discord || !reason){
-    alert("Fill everything");
-    return;
-  }
+  if(!name || !discord || !reason) return alert("Fill everything");
 
   apps.push({name, discord, reason});
   localStorage.setItem("apps", JSON.stringify(apps));
 
   notify("NORMAL", name, reason);
   updateStats();
-  alert("Application Sent");
+  alert("Submitted");
 }
 
 /* PRO */
@@ -348,26 +358,40 @@ function submitPro(){
   let rank = document.getElementById("rank").value;
   let reason = document.getElementById("proReason").value;
 
-  if(!name || !rank || !reason){
-    alert("Fill everything");
-    return;
-  }
+  if(!name || !rank || !reason) return alert("Fill everything");
 
   proApps.push({name, rank, reason});
   localStorage.setItem("proApps", JSON.stringify(proApps));
 
   notify("PRO", name, `Rank: ${rank} | ${reason}`);
   updateStats();
-  alert("PRO Application Sent");
+  alert("Submitted");
+}
+
+/* COACH */
+function submitCoach(){
+  let name = document.getElementById("coachName").value;
+  let discord = document.getElementById("coachDiscord").value;
+  let hasCoached = document.getElementById("hasCoached").value;
+  let reason = document.getElementById("coachReason").value;
+
+  if(!name || !discord || !hasCoached || !reason) return alert("Fill everything");
+
+  coaches.push({name, discord, hasCoached, reason});
+  localStorage.setItem("coaches", JSON.stringify(coaches));
+
+  notify("COACH", name, `Coached Before: ${hasCoached} | ${reason}`);
+  updateStats();
+  alert("Submitted");
 }
 
 /* STATS */
 function updateStats(){
   document.getElementById("statsBox").innerHTML = `
-    <div class="statBox">Members<br>${BASE_MEMBERS}</div>
     <div class="statBox">Applications<br>${BASE_APPS + apps.length}</div>
     <div class="statBox">Pro Apps<br>${BASE_PRO + proApps.length}</div>
-    <div class="statBox">Coach<br>1</div>
+    <div class="statBox">Coach Applications<br>${coaches.length}</div>
+    <div class="statBox">Coaches (Staff)<br>${BASE_COACH}</div>
   `;
 }
 
