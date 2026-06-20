@@ -84,10 +84,6 @@ video {
   letter-spacing: 1.5px;
 }
 
-.nav button:hover {
-  color: #ddd;
-}
-
 /* PAGES */
 .page {
   display: none;
@@ -128,15 +124,11 @@ input, select, textarea {
   padding: 10px;
   width: 260px;
   margin: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255,255,255,0.1);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255,255,255,0.2);
   border-radius: 4px;
   box-sizing: border-box;
-}
-
-input::placeholder, textarea::placeholder {
-  color: #aaa;
 }
 
 textarea {
@@ -156,4 +148,231 @@ button.submit-btn {
   border-radius: 4px;
   width: 260px;
   margin-left: 6px;
-  transition: background 0.2No response
+  transition: background 0.2s ease;
+}
+
+/* STATS */
+.stats {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.statBox {
+  padding: 15px 25px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  min-width: 170px;
+}
+
+/* ANIMATIONS */
+@keyframes logoIn {
+  from { opacity: 0; transform: scale(1.2); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes subIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND -->
+<video autoplay muted loop>
+  <source src="https://cdn.coverr.co/videos/coverr-digital-grid-and-particles-1637/1080p.mp4">
+</video>
+
+<div class="overlay"></div>
+
+<!-- INTRO -->
+<div class="intro">
+  <h1>APEX</h1>
+  <p>INITIALIZING ESPORTS SYSTEM...</p>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button onclick="showPage('home')">HOME</button>
+  <button onclick="showPage('apply')">APPLY</button>
+  <button onclick="showPage('pro')">PRO APPLY</button>
+  <button onclick="showPage('coach')">COACH APPLY</button>
+  <button onclick="showPage('stats')">STATS</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <h2>WELCOME TO APEX</h2>
+</div>
+
+<!-- APPLY -->
+<div id="apply" class="page">
+  <h2>APPLICATION</h2>
+  <div class="panel">
+    <input id="name" placeholder="Name"><br>
+    <input id="discord" placeholder="Discord"><br>
+    <textarea id="reason" placeholder="Why do you want to join?"></textarea><br>
+    <button class="submit-btn" onclick="submitApp()">SUBMIT</button>
+  </div>
+</div>
+
+<!-- PRO -->
+<div id="pro" class="page">
+  <h2>PRO APPLICATION</h2>
+  <div class="panel">
+    <input id="proName" placeholder="Name"><br>
+    <select id="rank">
+      <option>Bronze</option>
+      <option>Silver</option>
+      <option>Gold</option>
+      <option>Platinum</option>
+      <option>Diamond</option>
+      <option>Champion</option>
+      <option>Unreal</option>
+    </select><br>
+    <textarea id="proReason" placeholder="Why pro?"></textarea><br>
+    <button class="submit-btn" onclick="submitPro()">SUBMIT</button>
+  </div>
+</div>
+
+<!-- COACH -->
+<div id="coach" class="page">
+  <h2>COACH APPLICATION</h2>
+  <div class="panel">
+    <input id="coachName" placeholder="Name"><br>
+    <input id="coachDiscord" placeholder="Discord"><br>
+    <select id="hasCoached">
+      <option>Yes</option>
+      <option>No</option>
+    </select><br>
+    <textarea id="coachReason" placeholder="Why coach?"></textarea><br>
+    <button class="submit-btn" onclick="submitCoach()">SUBMIT</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="stats" class="page">
+  <h2>STATS</h2>
+  <div class="stats" id="statsBox"></div>
+</div>
+
+<!-- FIREBASE + SYSTEM -->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  onSnapshot,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+/* FIREBASE */
+const firebaseConfig = {
+  apiKey: "AIzaSyCQE9kuVnS2ocgUBnCeh4PapGsJBoaWJPs",
+  authDomain: "apex-1afbc.firebaseapp.com",
+  projectId: "apex-1afbc",
+  storageBucket: "apex-1afbc.appspot.com",
+  messagingSenderId: "175993919550",
+  appId: "1:175993919550:web:093a686a9e9a4f8238596f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* COLLECTIONS */
+const appsRef = collection(db, "applications");
+const proRef = collection(db, "proApplications");
+const coachRef = collection(db, "coachApplications");
+
+/* WEBHOOK (optional) */
+const WEBHOOK = "";
+
+/* NAV */
+window.showPage = function(id){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* NOTIFY */
+async function notify(title, data){
+  if(!WEBHOOK) return;
+  fetch(WEBHOOK, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({content:`🔥 ${title}\n` + JSON.stringify(data)})
+  });
+}
+
+/* SUBMIT */
+window.submitApp = async function(){
+  await addDoc(appsRef,{
+    name: name.value,
+    discord: discord.value,
+    reason: reason.value,
+    time: Date.now()
+  });
+  notify("APPLICATION", {name:name.value});
+};
+
+window.submitPro = async function(){
+  await addDoc(proRef,{
+    name: proName.value,
+    rank: rank.value,
+    reason: proReason.value,
+    time: Date.now()
+  });
+  notify("PRO APP", {name:proName.value});
+};
+
+window.submitCoach = async function(){
+  await addDoc(coachRef,{
+    name: coachName.value,
+    discord: coachDiscord.value,
+    hasCoached: hasCoached.value,
+    reason: coachReason.value,
+    time: Date.now()
+  });
+  notify("COACH APP", {name:coachName.value});
+};
+
+/* LIVE STATS */
+const statsBox = document.getElementById("statsBox");
+
+onSnapshot(appsRef, update);
+onSnapshot(proRef, update);
+onSnapshot(coachRef, update);
+
+async function update(){
+  const a = await getDocs(appsRef);
+  const p = await getDocs(proRef);
+  const c = await getDocs(coachRef);
+
+  statsBox.innerHTML = `
+    <div class="statBox">Members<br>${32 + a.size}</div>
+    <div class="statBox">Applications<br>${a.size}</div>
+    <div class="statBox">Pro Apps<br>${p.size}</div>
+    <div class="statBox">Coach Apps<br>${c.size}</div>
+    <div class="statBox">Accepted<br>0</div>
+  `;
+}
+
+update();
+
+</script>
+
+</body>
+</html>
