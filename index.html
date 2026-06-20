@@ -1,348 +1,339 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<title>APEX ESPORTS</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
 body {
-  background: radial-gradient(circle at top, #111, #000);
+  margin: 0;
+  font-family: Arial;
+  background: black;
   color: white;
   overflow: hidden;
 }
 
-/* =========================
-   LOBBY LAYOUT
-========================= */
+/* ================= CINEMATIC INTRO ================= */
+#intro {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.intro-bg {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 40%);
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translate(0,0); }
+  50% { transform: translate(-5%,-5%); }
+  100% { transform: translate(0,0); }
+}
+
+.intro-content {
+  text-align: center;
+  z-index: 2;
+}
+
+.intro-logo {
+  font-size: 90px;
+  letter-spacing: 15px;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+  to { text-shadow: 0 0 40px rgba(255,255,255,0.5); }
+}
+
+#intro button {
+  padding: 12px 20px;
+  margin-top: 20px;
+  background: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* ================= BACKGROUND ================= */
+.bg {
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08), transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 40%);
+  animation: move 12s linear infinite;
+  z-index: -1;
+}
+
+@keyframes move {
+  0% { transform: translate(0,0); }
+  50% { transform: translate(-10%,-10%); }
+  100% { transform: translate(0,0); }
+}
+
+/* ================= LAYOUT ================= */
 .lobby {
   display: flex;
   height: 100vh;
-  width: 100%;
 }
 
-/* =========================
-   LEFT MENU (GAME STYLE)
-========================= */
+/* MENU */
 .menu {
   width: 240px;
   background: rgba(255,255,255,0.03);
-  backdrop-filter: blur(15px);
-  border-right: 1px solid rgba(255,255,255,0.08);
+  border-right: 1px solid rgba(255,255,255,0.1);
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .brand {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
-  letter-spacing: 3px;
-  color: #e5e5e5;
   margin-bottom: 20px;
-  text-shadow: 0 0 10px rgba(255,255,255,0.15);
 }
 
 .menu button {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.15);
-  color: white;
+  width: 100%;
+  margin: 6px 0;
   padding: 10px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
   cursor: pointer;
-  transition: 0.25s;
-  border-radius: 6px;
 }
 
-.menu button:hover {
-  background: white;
-  color: black;
-  transform: translateX(5px);
-}
-
-/* =========================
-   MAIN SCREEN
-========================= */
+/* SCREEN */
 .screen {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  position: relative;
 }
 
-/* =========================
-   PAGES
-========================= */
-.page {
-  display: none;
-  animation: fade 0.5s ease;
-}
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
 
-.page.active {
-  display: block;
-}
-
-@keyframes fade {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* =========================
-   TITLE (APEX LOGO)
-========================= */
+/* TITLE */
 .title {
-  font-size: 90px;
-  letter-spacing: 12px;
-  font-weight: bold;
-  color: #e5e5e5;
-  text-shadow: 0 0 30px rgba(255,255,255,0.15);
-  animation: glow 2.5s infinite alternate;
+  font-size: 80px;
+  letter-spacing: 10px;
 }
 
-@keyframes glow {
-  from { text-shadow: 0 0 10px rgba(255,255,255,0.1); }
-  to { text-shadow: 0 0 35px rgba(255,255,255,0.4); }
-}
-
-/* =========================
-   SUB TEXT
-========================= */
-.sub {
-  margin-top: 10px;
-  color: #aaa;
-}
-
-/* =========================
-   BUTTONS (GAME STYLE)
-========================= */
-button {
-  margin-top: 12px;
-  padding: 12px 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  background: linear-gradient(90deg, #dcdcdc, #777);
-  color: black;
-  transition: 0.25s;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(255,255,255,0.2);
-}
-
-/* =========================
-   INPUT SYSTEM
-========================= */
-input,
-textarea,
-select {
+/* INPUTS */
+input, select, textarea {
   display: block;
-  margin: 10px auto;
-  width: 260px;
+  margin: 8px auto;
   padding: 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(0,0,0,0.4);
+  width: 260px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
   color: white;
 }
 
-/* =========================
-   TEXT AREA
-========================= */
-textarea {
-  height: 90px;
-  resize: none;
+/* BUTTON */
+button {
+  padding: 10px 15px;
+  margin-top: 10px;
+  background: white;
+  color: black;
+  border: none;
+  cursor: pointer;
 }
 
-/* =========================
-   SUCCESS SCREEN
-========================= */
-#success {
-  text-align: center;
-}
-
-#discordBtn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 18px;
-  background: #5865F2;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(88,101,242,0.3);
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 768px) {
-  .menu {
-    width: 160px;
-  }
-
-  .title {
-    font-size: 50px;
-  }
-
-  input, textarea, select {
-    width: 90%;
-  }
+/* CARDS */
+.card {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 15px;
+  margin: 10px;
 }
 </style>
 
 </head>
 
 <body>
+
+<!-- CINEMATIC INTRO -->
+<div id="intro">
+  <div class="intro-bg"></div>
+  <div class="intro-content">
+    <h1 class="intro-logo">APEX</h1>
+    <p>ESPORTS ORGANIZATION</p>
+    <button onclick="enterSite()">CLICK TO ENTER</button>
+  </div>
+</div>
+
 <div class="bg"></div>
 
 <div class="lobby">
 
-  <!-- LEFT MENU -->
+  <!-- MENU -->
   <div class="menu">
     <div class="brand">▲ APEX</div>
 
-    <button onclick="showPage('home')">HOME</button>
-    <button onclick="showPage('about')">ABOUT</button>
-    <button onclick="showPage('apply')">APPLY</button>
-    <button onclick="showPage('faq')">FAQ</button>
+    <button onclick="show('home')">HOME</button>
+    <button onclick="show('about')">ABOUT</button>
+    <button onclick="show('apply')">APPLY</button>
+    <button onclick="show('pro')">PRO</button>
+    <button onclick="show('dash')">DASHBOARD</button>
   </div>
 
-  <!-- MAIN SCREEN -->
+  <!-- SCREEN -->
   <div class="screen">
 
     <!-- HOME -->
     <section id="home" class="page active">
       <h1 class="title">APEX</h1>
-      <p class="sub">Competitive Fortnite Esports Community</p>
+      <p>ESPORTS ORG</p>
 
-      <div class="actions">
-        <button onclick="showPage('apply')">PLAY (JOIN)</button>
-        <button onclick="openPro()">PRO TRYOUTS</button>
+      <div class="card">
+        <h3>LIVE MEMBERS</h3>
+        <h1 id="members">30</h1>
       </div>
     </section>
 
     <!-- ABOUT -->
     <section id="about" class="page">
       <h2>ABOUT APEX</h2>
-      <p>
-        APEX is a competitive Fortnite organization offering free coaching,
-        giveaways on special occasions, and support for both Build and Zero Build players.
-      </p>
+      <p>Free coaching, giveaways, Build & Zero Build support.</p>
     </section>
 
     <!-- APPLY -->
     <section id="apply" class="page">
-      <h2>PLAYER APPLICATION</h2>
 
-      <div class="form">
-        <input id="discord" placeholder="Discord Username">
-        <input id="epic" placeholder="Epic Username">
-        <input id="age" placeholder="Age">
-        <input id="region" placeholder="Region">
+      <h2>APPLICATION</h2>
 
-        <select id="rank">
-          <option value="">Rank</option>
-          <option>Bronze</option>
-          <option>Silver</option>
-          <option>Gold</option>
-          <option>Platinum</option>
-          <option>Diamond</option>
-          <option>Champion</option>
-          <option>Unreal</option>
-        </select>
+      <input id="discord" placeholder="Discord">
+      <input id="epic" placeholder="Epic">
+      <input id="age" placeholder="Age">
+      <input id="region" placeholder="Region">
 
-        <textarea id="reason" placeholder="Why join APEX?"></textarea>
+      <select id="rank">
+        <option>Rank</option>
+        <option>Bronze</option>
+        <option>Silver</option>
+        <option>Gold</option>
+        <option>Platinum</option>
+        <option>Diamond</option>
+        <option>Champion</option>
+        <option>Unreal</option>
+      </select>
 
-        <button onclick="submitApp()">SUBMIT</button>
-      </div>
-    </section>
+      <textarea id="reason" placeholder="Why join APEX?"></textarea>
 
-    <!-- FAQ -->
-    <section id="faq" class="page">
-      <h2>FAQ</h2>
-      <p>Free coaching available for all members.</p>
-      <p>We support Build & Zero Build players.</p>
-      <p>No earnings required to join.</p>
+      <button onclick="submitApp()">SUBMIT</button>
+
     </section>
 
     <!-- PRO -->
     <section id="pro" class="page">
+
       <h2>PRO TRYOUTS</h2>
 
-      <input id="proDiscord" placeholder="Discord">
-      <input id="proEpic" placeholder="Epic">
-      <input id="clip" placeholder="Clip Link (REQUIRED)">
+      <input id="pdisc" placeholder="Discord">
+      <input id="pepic" placeholder="Epic">
+      <input id="clip" placeholder="CLIP REQUIRED">
 
       <button onclick="submitPro()">SUBMIT PRO</button>
-      <button onclick="showPage('home')">BACK</button>
+
     </section>
 
-    <!-- SUCCESS -->
-    <section id="success" class="page">
-      <h2>APPLICATION SENT</h2>
-      <a id="discordBtn" href="https://discord.gg/uKsnSB3ZwU" target="_blank">
-        JOIN DISCORD
-      </a>
+    <!-- DASHBOARD -->
+    <section id="dash" class="page">
+      <h2>ORG DASHBOARD</h2>
+
+      <div class="card">
+        <h3>Members</h3>
+        <h1 id="m2">30</h1>
+      </div>
+
+      <div class="card">
+        <h3>Applications</h3>
+        <h1>30</h1>
+      </div>
+
+      <div class="card">
+        <h3>Coaches</h3>
+        <h1>1</h1>
+      </div>
+
     </section>
 
   </div>
 </div>
-</body>
-</html>
 
 <script>
+
 const WEBHOOK = "PASTE_WEBHOOK_HERE";
 
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+/* INTRO */
+function enterSite(){
+  document.getElementById("intro").style.display = "none";
+}
+
+/* NAV */
+function show(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
+/* LIVE COUNTER */
+let members = 30;
+
+setInterval(()=>{
+  members += Math.random()>0.5?1:-1;
+  if(members<25) members=25;
+  if(members>40) members=40;
+
+  document.getElementById("members").innerText = members;
+  document.getElementById("m2").innerText = members;
+},3000);
+
+/* APPLY */
 function submitApp(){
 
-  const d = discord.value;
-  const e = epic.value;
-  const a = age.value;
-  const r = region.value;
-  const rk = rank.value;
-  const rs = reason.value;
-
-  if(!d || !e || !a || !r || !rk || !rs){
-    alert("Fill everything");
-    return;
-  }
+  const discord = document.getElementById("discord").value;
+  const epic = document.getElementById("epic").value;
+  const rank = document.getElementById("rank").value;
+  const reason = document.getElementById("reason").value;
 
   fetch(WEBHOOK,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
-      content:"🔥 NEW APEX PLAYER",
+      content:"NEW APPLICATION",
       embeds:[{
-        title:"APEX APPLICATION",
+        title:"APEX APP",
         fields:[
-          {name:"Discord", value:d},
-          {name:"Epic", value:e},
-          {name:"Rank", value:rk},
-          {name:"Reason", value:rs}
+          {name:"Discord", value:discord},
+          {name:"Epic", value:epic},
+          {name:"Rank", value:rank},
+          {name:"Reason", value:reason}
         ]
       }]
     })
   });
 
-  showPage("success");
+  alert("Submitted!");
 }
 
+/* PRO */
 function submitPro(){
 
-  if(!clip.value){
+  const pdisc = document.getElementById("pdisc").value;
+  const pepic = document.getElementById("pepic").value;
+  const clip = document.getElementById("clip").value;
+
+  if(!clip){
     alert("Clip required");
     return;
   }
@@ -351,24 +342,21 @@ function submitPro(){
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
-      content:"🏆 PRO TRYOUT",
+      content:"PRO TRYOUT",
       embeds:[{
-        title:"APEX PRO APPLICATION",
+        title:"APEX PRO",
         fields:[
-          {name:"Discord", value:proDiscord.value},
-          {name:"Epic", value:proEpic.value},
-          {name:"Clip", value:clip.value}
+          {name:"Discord", value:pdisc},
+          {name:"Epic", value:pepic},
+          {name:"Clip", value:clip}
         ]
       }]
     })
   });
 
-  showPage("success");
+  alert("PRO SUBMITTED");
 }
 
-function openPro(){
-  showPage("pro");
-}
 </script>
 
 </body>
