@@ -201,9 +201,6 @@ button {
 <!-- HOME -->
 <div id="home" class="page active">
   <h2>WELCOME TO APEX</h2>
-  <div class="panel">
-    Elite esports organization recruitment system built for competitive players.
-  </div>
 </div>
 
 <!-- APPLY -->
@@ -266,34 +263,8 @@ button {
 <!-- ABOUT -->
 <div id="about" class="page">
   <h2>ABOUT APEX</h2>
-
   <div class="panel">
-
-    <p><b>APEX</b> is a competitive esports organization built for players who want to grow beyond casual gameplay and enter a structured competitive environment.</p>
-
-    <p>We focus on skill development, teamwork, and competitive progression through a structured recruitment system.</p>
-
-    <hr style="border:1px solid rgba(255,255,255,0.1); margin:15px 0;">
-
-    <p><b>WHAT WE OFFER</b><br>
-    • Structured recruitment system<br>
-    • Pro competitive division<br>
-    • Coaching staff for improvement<br>
-    • Active competitive community</p>
-
-    <hr style="border:1px solid rgba(255,255,255,0.1); margin:15px 0;">
-
-    <p><b>OUR STRUCTURE</b><br>
-    • Application Pipeline<br>
-    • Pro Division<br>
-    • Coaching Staff</p>
-
-    <hr style="border:1px solid rgba(255,255,255,0.1); margin:15px 0;">
-
-    <p style="color:#aaa;">
-      “We don’t just accept players — we build competitors.”
-    </p>
-
+    Elite esports organization recruitment system built for competitive players.
   </div>
 </div>
 
@@ -314,27 +285,12 @@ setTimeout(() => {
 const BASE_APPS = 32;
 const BASE_PRO = 2;
 const BASE_COACH = 1;
+const BASE_MEMBERS = 32; // ✅ ADDED
 
 /* STORAGE */
 let apps = JSON.parse(localStorage.getItem("apps") || "[]");
 let proApps = JSON.parse(localStorage.getItem("proApps") || "[]");
 let coaches = JSON.parse(localStorage.getItem("coaches") || "[]");
-
-/* WEBHOOK */
-const webhook = "YOUR_WEBHOOK_URL_HERE";
-
-/* NOTIFY */
-function notify(type, name, extra){
-  if(webhook.includes("http")){
-    fetch(webhook, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        content: `🔥 ${type} APPLICATION\n👤 ${name}\n📝 ${extra}`
-      })
-    });
-  }
-}
 
 /* APPLY */
 function submitApp(){
@@ -347,9 +303,7 @@ function submitApp(){
   apps.push({name, discord, reason});
   localStorage.setItem("apps", JSON.stringify(apps));
 
-  notify("NORMAL", name, reason);
   updateStats();
-  alert("Submitted");
 }
 
 /* PRO */
@@ -363,9 +317,7 @@ function submitPro(){
   proApps.push({name, rank, reason});
   localStorage.setItem("proApps", JSON.stringify(proApps));
 
-  notify("PRO", name, `Rank: ${rank} | ${reason}`);
   updateStats();
-  alert("Submitted");
 }
 
 /* COACH */
@@ -380,14 +332,13 @@ function submitCoach(){
   coaches.push({name, discord, hasCoached, reason});
   localStorage.setItem("coaches", JSON.stringify(coaches));
 
-  notify("COACH", name, `Coached Before: ${hasCoached} | ${reason}`);
   updateStats();
-  alert("Submitted");
 }
 
 /* STATS */
 function updateStats(){
   document.getElementById("statsBox").innerHTML = `
+    <div class="statBox">Members<br>${BASE_MEMBERS + apps.length}</div>
     <div class="statBox">Applications<br>${BASE_APPS + apps.length}</div>
     <div class="statBox">Pro Apps<br>${BASE_PRO + proApps.length}</div>
     <div class="statBox">Coach Applications<br>${coaches.length}</div>
